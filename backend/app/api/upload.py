@@ -7,14 +7,30 @@
 from fastapi import APIRouter, UploadFile, File
 from typing import List
 
+from app.services.document_service import save_document
+
+
 router = APIRouter(
     prefix="/upload",
     tags=["Document Upload"]
 )
 
+
 @router.post("/")
-async def upload_documents(files: List[UploadFile] = File(...)):
+async def upload_documents(
+    files: List[UploadFile] = File(...)
+):
+
+    saved_files = []
+
+    for file in files:
+
+        path = await save_document(file)
+
+        saved_files.append(path)
+
+
     return {
-        "message": "Files received",
-        "files": [file.filename for file in files]
+        "message": "Files uploaded successfully",
+        "files": saved_files
     }

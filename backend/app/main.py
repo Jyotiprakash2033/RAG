@@ -23,10 +23,6 @@ async def lifespan(app: FastAPI):
     # Shutdown logic
     print("🛑 RAG Backend shutting down...")
 
-
-
-
-
 app = FastAPI(
     title="Multi Document RAG API",
     description="Basic RAG system with PDF upload and question answering",
