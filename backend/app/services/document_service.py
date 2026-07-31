@@ -5,55 +5,59 @@
 # - Step 3: Call Embeddings to generate vector representations
 # - Step 4: Call VectorStore to persist vectors & metadata in ChromaDB
 from pathlib import Path
+
 from fastapi import UploadFile
 
 from app.rag.loader import load_pdf
 from app.rag.chunker import split_documents
 from app.rag.vector_store import add_documents
 
-
 UPLOAD_DIR = Path("data/uploads")
 
 
-async def save_document(file: UploadFile):
+async def save_file(file: UploadFile) -> Path:
+    """
+    Save uploaded file to disk.
+    """
 
-    # Create upload directory if it doesn't exist
-    UPLOAD_DIR.mkdir(
-        parents=True,
-        exist_ok=True
-    )
+    UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Save uploaded file
     file_path = UPLOAD_DIR / file.filename
 
     with open(file_path, "wb") as buffer:
         content = await file.read()
         buffer.write(content)
 
-    print(f"\n📄 File Saved: {file.filename}")
+    print(f"📄 File saved: {file.filename}")
 
-    # --------------------------
-    # Load PDF
-    # --------------------------
+    return file_path
+
+
+def process_document(file_path: Path):
+    """
+    Load, chunk and index the document.
+    """
 
     documents = load_pdf(file_path)
 
-    print(f"📚 Pages Loaded: {len(documents)}")
-
-    # --------------------------
-    # Chunk Documents
-    # --------------------------
+    print(f"📚 Loaded Pages : {len(documents)}")
 
     chunks = split_documents(documents)
 
-    print(f"✂️ Chunks Created: {len(chunks)}")
-
-    # --------------------------
-    # Store in Vector DB
-    # --------------------------
+    print(f"✂️ Total Chunks : {len(chunks)}")
 
     add_documents(chunks)
 
-    print("✅ Stored in ChromaDB")
+    print("✅ Indexed into ChromaDB")
 
-    return str(file_path)
+
+async def save_document(file: UploadFile):
+    """
+    Complete ingestion pipeline.
+    """
+
+    file_path = await save_file(file)
+
+    process_document(file_path)
+
+    return file_path

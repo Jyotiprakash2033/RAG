@@ -9,5 +9,6 @@ pypdf
 sentence-transformers
 langchain-huggingface
 langchain-chroma
+langchain-ollama
 python-dotenv
 
