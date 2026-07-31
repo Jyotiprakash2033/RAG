@@ -7,7 +7,8 @@
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from app.api import upload
+from app.api.upload import router as upload_router
+from app.api.chat import router as chat_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -30,7 +31,8 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-app.include_router(upload.router)
+app.include_router(upload_router)
+app.include_router(chat_router)
 
 @app.get("/")
 def root():
