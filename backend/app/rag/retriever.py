@@ -10,7 +10,7 @@ from app.rag.vector_store import vector_store
 
 def retrieve_documents(
     query: str,
-    k: int = 4
+    k: int = 5
 ) -> list[Document]:
     """
     Retrieve the most relevant document chunks.

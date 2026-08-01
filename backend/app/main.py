@@ -5,8 +5,15 @@
 # - Exposes root and health check endpoints
 # uvicorn app.main:app --reload
 
+import os
+
+# Configure HF mirror to prevent connection reset errors when downloading HuggingFace models on Windows
+os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from app.api.upload import router as upload_router
 from app.api.chat import router as chat_router
 
@@ -29,6 +36,16 @@ app = FastAPI(
     description="Basic RAG system with PDF upload and question answering",
     version="1.0.0",
     lifespan=lifespan
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(upload_router)

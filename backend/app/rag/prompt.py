@@ -1,21 +1,24 @@
-# Prompt Template Specification
-# - Defines system prompt and context template for LLM
-# - Combines retrieved context passages with user query
-# - Ensures LLM bases answers strictly on retrieved context
-
 from langchain_core.prompts import ChatPromptTemplate
 
+
 rag_prompt = ChatPromptTemplate.from_template(
-    """
-You are a helpful AI assistant.
+"""
+You are a resume assistant.
 
-Answer the user's question ONLY using the provided context.
+Answer the user's question using ONLY the provided resume context.
 
-If the answer is not present in the context, say:
-"I couldn't find that information in the uploaded documents."
+Rules:
+- Give only the information requested by the user.
+- If the user asks for projects, return ONLY project names and project details.
+- Do NOT include certifications, courses, education, or achievements in project answers.
+- If the user asks for certifications, return ONLY certifications.
+- Do not mix different resume sections.
+- Do not invent information.
 
 Context:
+----------------
 {context}
+----------------
 
 Question:
 {question}
