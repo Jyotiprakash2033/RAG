@@ -4,8 +4,12 @@
 # - Generates query embeddings for incoming user questions
 
 
-from langchain_huggingface import HuggingFaceEmbeddings
+import os
 
+# Set HF mirror to bypass network connection resets to huggingface.co on Windows
+os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
+
+from langchain_huggingface import HuggingFaceEmbeddings
 
 embedding_model = HuggingFaceEmbeddings(
     model_name="BAAI/bge-small-en-v1.5"

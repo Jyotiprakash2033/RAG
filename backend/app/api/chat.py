@@ -17,6 +17,7 @@ router = APIRouter(
 )
 
 
+
 @router.post("/")
 def chat(request: ChatRequest):
 
@@ -25,11 +26,25 @@ def chat(request: ChatRequest):
         query=request.question
     )
 
+
+    # DEBUG: Check retrieved chunks
+    print("\n\n========== RETRIEVED DOCUMENTS ==========")
+
+    for i, doc in enumerate(documents):
+        print(f"\n--- CHUNK {i+1} ---")
+        print(doc.page_content)
+        print("METADATA:")
+        print(doc.metadata)
+
+    print("\n========================================\n")
+
+
     # Merge chunks into one context
     context = "\n\n".join(
         doc.page_content
         for doc in documents
     )
+
 
     # Generate answer
     answer = generate_answer(
@@ -38,15 +53,17 @@ def chat(request: ChatRequest):
     )
 
     return {
-            "answer": answer,
-            "sources": [
-                {
-                    "content": doc.page_content,
-                    "metadata": doc.metadata
-                    }
+        "answer": answer,
+        "sources": [
+            {
+                "content": doc.page_content,
+                "metadata": doc.metadata
+            }
             for doc in documents
         ]
     }
+
+  
 
 
 # from fastapi import APIRouter
