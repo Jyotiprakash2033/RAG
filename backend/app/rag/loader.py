@@ -7,14 +7,13 @@ from pathlib import Path
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.documents import Document
 
-
 def load_pdf(pdf_path: Path) -> list[Document]:
-    """
-    Load a PDF and return one Document object per page.
-    """
 
     loader = PyPDFLoader(str(pdf_path))
 
     documents = loader.load()
+
+    for doc in documents:
+        doc.metadata["source"] = pdf_path.name
 
     return documents

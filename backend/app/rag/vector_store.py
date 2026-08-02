@@ -28,3 +28,6 @@ def add_documents(documents: list[Document]):
 
 def similarity_search(query: str, k: int = 4):
     return vector_store.similarity_search(query, k=k)
+
+def similarity_search_with_score(query: str, k: int = 5):
+    return vector_store.similarity_search_with_score(query, k=k)

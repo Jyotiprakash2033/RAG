@@ -26,17 +26,11 @@ def chat(request: ChatRequest):
         query=request.question
     )
 
-
-    # DEBUG: Check retrieved chunks
-    print("\n\n========== RETRIEVED DOCUMENTS ==========")
+    print("\n========== RETRIEVED DOCUMENTS ==========")
 
     for i, doc in enumerate(documents):
-        print(f"\n--- CHUNK {i+1} ---")
-        print(doc.page_content)
-        print("METADATA:")
-        print(doc.metadata)
-
-    print("\n========================================\n")
+        print(f"\nCHUNK {i+1}")
+        print(doc.page_content[:300])
 
 
     # Merge chunks into one context
@@ -44,6 +38,13 @@ def chat(request: ChatRequest):
         doc.page_content
         for doc in documents
     )
+
+    print("\n========== CONTEXT LENGTH ==========")
+    print(len(context))
+
+    print("\n========== CONTEXT ==========")
+    print(context)
+
 
 
     # Generate answer
@@ -56,14 +57,12 @@ def chat(request: ChatRequest):
         "answer": answer,
         "sources": [
             {
-                "content": doc.page_content,
-                "metadata": doc.metadata
+                "source": doc.metadata.get("source"),
+                "page": doc.metadata.get("page_label")
             }
             for doc in documents
         ]
     }
-
-  
 
 
 # from fastapi import APIRouter
