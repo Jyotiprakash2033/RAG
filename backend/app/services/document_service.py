@@ -44,6 +44,12 @@ def process_document(file_path: Path):
 
     chunks = split_documents(documents)
 
+    print("\n===== CREATED CHUNKS =====")
+
+    for i, chunk in enumerate(chunks):
+        print(f"\nCHUNK {i+1}")
+        print(chunk.page_content[:500])
+
     print(f"✂️ Total Chunks : {len(chunks)}")
 
     add_documents(chunks)

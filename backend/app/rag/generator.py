@@ -9,6 +9,8 @@ def generate_answer(
     """
     Generate an answer using the retrieved context.
     """
+    print("\n========== CONTEXT SENT TO LLM ==========")
+    print(context)
 
     messages = rag_prompt.format_messages(
         question=question,
