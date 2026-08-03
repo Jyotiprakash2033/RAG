@@ -43,9 +43,19 @@ def process_document(file_path: Path):
     print(f"📚 Loaded Pages : {len(documents)}")
 
     chunks = split_documents(documents)
+    from pathlib import Path
 
+    document_id = file_path.name
+
+    for i, chunk in enumerate(chunks):
+      chunk.metadata["document_id"] = document_id
+      chunk.metadata["chunk"] = i
     print("\n===== CREATED CHUNKS =====")
 
+    for i, chunk in enumerate(chunks):
+     print(f"\nCHUNK {i+1}")
+     print("Metadata:", chunk.metadata)
+     print(chunk.page_content[:300])
     for i, chunk in enumerate(chunks):
         print(f"\nCHUNK {i+1}")
         print(chunk.page_content[:500])

@@ -16,7 +16,12 @@ def generate_answer(
         question=question,
         context=context,
     )
+    print("\n========== PROMPT SENT TO LLM ==========\n")
 
+    for msg in messages:
+        print(msg.type.upper())
+        print(msg.content)
+        print("-" * 80)
     response = llm.invoke(messages)
 
     return response.content
